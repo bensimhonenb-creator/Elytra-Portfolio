@@ -1,0 +1,192 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  /* 🔥 NOUVEAU : Optimisation du rendu des polices pour Windows */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-smooth: always;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  font-family: "Outfit", sans-serif;
+  background: #000;
+  cursor: grab;
+  user-select: none;
+  overflow: hidden;
+  /* 🔥 NOUVEAU : Force le rendu subpixel sur Windows */
+  -webkit-font-smoothing: subpixel-antialiased;
+}
+
+body.dragging {
+  cursor: grabbing;
+}
+
+#gallery {
+  position: relative;
+  width: 100vw;
+  height: 100svh;
+  /* 🔥 NOUVEAU : Améliore le rendu WebGL sur Windows */
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
+#gallery canvas {
+  /* 🔥 NOUVEAU : Force le rendu haute qualité du canvas */
+  image-rendering: -webkit-optimize-contrast;
+  -ms-interpolation-mode: nearest-neighbor;
+}
+
+.vignette-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 50%,
+    rgba(0, 0, 0, 0.1) 70%,
+    rgba(0, 0, 0, 0.75) 90%,
+    rgba(0, 0, 0, 1) 100%
+  );
+}
+
+/* NAVBAR */
+.nav-wrap {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 8px;
+  border-radius: 48px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(20px) saturate(150%);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  z-index: 2147483647;
+  pointer-events: auto;
+  isolation: isolate;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3),
+              0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  touch-action: pan-x;
+  pointer-events: auto;
+}
+
+.nav::-webkit-scrollbar {
+  display: none;
+}
+
+.tab {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 23px;
+  border-radius: 999px;
+  text-decoration: none;
+  color: rgb(0, 0, 0);
+  font-weight: 400;
+  font-size: 15px;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+  background: transparent;
+  /* 🔥 NOUVEAU : Améliore le rendu du texte dans la navbar */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.tab:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.95);
+  transform: translateY(-1px);
+}
+
+.tab.active {
+  background: linear-gradient(135deg, 
+              rgba(255, 255, 255, 0.95) 0%, 
+              rgba(255, 255, 255, 0.85) 100%);
+  color: rgba(0, 0, 0, 0.9);
+  font-weight: 600;
+  box-shadow: 0 4px 16px rgba(255, 255, 255, 0.2),
+              0 2px 8px rgba(0, 0, 0, 0.1),
+              inset 0 1px 0 rgba(255, 255, 255, 0.8),
+              inset 0 -1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.tab.active:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(255, 255, 255, 0.25),
+              0 2px 8px rgba(0, 0, 0, 0.15),
+              inset 0 1px 0 rgba(255, 255, 255, 0.9),
+              inset 0 -1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.nav-wrap::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: 50px;
+  padding: 1px;
+  background: linear-gradient(135deg, 
+              rgba(255, 255, 255, 0.2) 0%, 
+              rgba(255, 255, 255, 0.05) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, 
+                linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .nav-wrap {
+    padding: 7px;
+    bottom: 16px;
+  }
+  .nav {
+    gap: 5px;
+  }
+  .tab {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 420px) {
+  .nav-wrap {
+    padding: 6px;
+  }
+  .tab {
+    padding: 9px 16px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 360px) {
+  .tab {
+    padding: 8px 14px;
+    font-size: 12px;
+  }
+}
